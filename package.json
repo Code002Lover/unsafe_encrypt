@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "node-prompt": "^0.2.2",
+    "readline-sync": "^1.4.10"
+  }
+}

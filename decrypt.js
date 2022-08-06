@@ -1,36 +1,14 @@
-const enc_stuff = require("./enc_module.js")
-const SHA256 = enc_stuff.SHA256
-const xor = enc_stuff.xor
+const unsafeencrypt = require("./index.js")
 
-const fs = require("fs")
+const out = unsafeencrypt.decrypt()
 
-let out = fs.readFileSync("output.txt").toString()
-
-let buf = Buffer.from(out,"hex")
-
-out = buf.toString()
-
-let messagekey = fs.readFileSync("messagekey.txt").toString()
-
-let signed = xor(out,messagekey)
-
-let hashes = parseInt(signed.substring(signed.lastIndexOf("\.")+1))
-
-signed = signed.substring(0,signed.lastIndexOf("\."))
-
-let msg = signed.substring(0,signed.lastIndexOf("\."))
-let hash = signed.substring(signed.lastIndexOf("\.")+1)
-
-const signkey = fs.readFileSync("signkey.txt").toString()
-
-let signhash = SHA256(msg,signkey,hashes)
-
-if(signhash == hash) {
-    console.log("output:");
-    console.log(msg);
+if(out.status == "success") {
+    console.log("output:")
+    console.log(out.msg)
 } else {
-    console.log("key mismatch?");
-    console.log("Message:",msg);
-    console.log("signature:",hash);
-    console.log("expected:",signhash);
+    console.log("error decrypting the message")
+    console.log("perhaps you have the wrong keys?")
+    console.log("decrypted message: ", out.msg)
+    console.log("signature: ", out.signature)
+    console.log("signature expected: ", out.expected)
 }

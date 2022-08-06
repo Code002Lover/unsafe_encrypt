@@ -1,13 +1,11 @@
 {
   "dependencies": {
-    "node-prompt": "^0.2.2",
     "readline-sync": "^1.4.10"
   },
   "name": "unsafe_encrypt",
   "description": "run `node encrypt.js`\r input the message",
   "version": "0.0.1",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "node encrypt.js --msg test && node decrypt.js -s"
   },

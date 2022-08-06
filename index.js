@@ -10,7 +10,7 @@ function decrypt(str) {
 
     let out;
 
-    if(str.search("\.") == -1 && str != "") {
+    if(str.search("\\.") == -1 && str != "") {
         out = str
     } else {
         out = fs.readFileSync(str || "output.txt").toString()
@@ -68,7 +68,7 @@ function encrypt(msg) {
     const messagekey = fs.readFileSync("messagekey.txt").toString()
     
     const hashes = 1000
-    
+
     let signedmsg = msg + "." + SHA256(msg,signkey,hashes) + "." + hashes
     
     let xoredmsg = xor(signedmsg,messagekey)

@@ -2,5 +2,23 @@
   "dependencies": {
     "node-prompt": "^0.2.2",
     "readline-sync": "^1.4.10"
-  }
+  },
+  "name": "unsafe_encrypt",
+  "description": "run `node encrypt.js`\r input the message",
+  "version": "0.0.1",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "node encrypt.js --msg test && node decrypt.js -s"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mystikfluu/unsafe_encrypt.git"
+  },
+  "author": "Code002Lover",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mystikfluu/unsafe_encrypt/issues"
+  },
+  "homepage": "https://github.com/Mystikfluu/unsafe_encrypt#readme"
 }

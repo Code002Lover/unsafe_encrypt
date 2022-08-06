@@ -21,12 +21,12 @@ function SHA256(str,salt,num) {
 
 function xor(a,b) {
     let c = ""
-    for (let ac of a) {
-        cc = ac.charCodeAt(0)
+    for (let j=0;j<a.length;j++) {
+        cc = a.charCodeAt(j) ^ j
         for(let i=0;i<b.length;i++) {
             cc = cc ^ b.charCodeAt(i) ^ i
         }
-        c += String.fromCharCode(cc)
+        c += String.fromCharCode(cc ^ a.length)
     }
 
     return c

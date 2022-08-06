@@ -1,18 +1,28 @@
 const unsafeencrypt = require("./index.js")
 
-const out = unsafeencrypt.decrypt()
+const fs = require("fs")
 
 let argv = process.argv.splice(2)
 
+let input = ""
 let silent = false
 
-for(let arg of argv) {
+for(let i in argv) {
+    let arg = argv[i]
     switch(arg) {
         case "-s":
             silent = true
             break;
+        case "-i":
+            input = argv[++i]
+            break
+        case "-h":
+            console.log(fs.readFileSync("helpmessages/decrypt.txt").toString())
+            process.exit(0)
     }
 }
+
+const out = unsafeencrypt.decrypt(input)
 
 if(out.status == "success") {
     if(silent)return

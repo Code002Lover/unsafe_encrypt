@@ -1,0 +1,5 @@
+[[ DECRYPT ]]
+
+-h : Shows you the current view
+-s : silent, only to be used in test cases
+-i : Specify the input (file/text) (the encrypted text)

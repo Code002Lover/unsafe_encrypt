@@ -4,7 +4,7 @@ const xor = enc_stuff.xor
 
 const fs = require("fs")
 
-function decrypt(str) {
+function decrypt(str,options) {
 
     str = str || ""
 
@@ -20,7 +20,8 @@ function decrypt(str) {
 
     out = buf.toString()
 
-    let messagekey = fs.readFileSync("messagekey.txt").toString()
+    let messagekey = options.messagekey
+    if(!messagekey)messagekey = fs.readFileSync("messagekey.txt").toString()
 
     let signed = xor(out,messagekey)
 
@@ -31,7 +32,8 @@ function decrypt(str) {
     let msg = signed.substring(0,signed.lastIndexOf("\."))
     let hash = signed.substring(signed.lastIndexOf("\.")+1)
 
-    const signkey = fs.readFileSync("signkey.txt").toString()
+    let signkey = options.signkey
+    if(!signkey)signkey = fs.readFileSync("signkey.txt").toString()
 
     let signhash = SHA256(msg,signkey,hashes)
 

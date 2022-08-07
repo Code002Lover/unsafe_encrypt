@@ -27,6 +27,10 @@ function decrypt(str,options) {
 
     let signed = xor(out,messagekey)
 
+    let version = signed.substring(signed.lastIndexOf("\.")+1)
+    signed = signed.substring(0,signed.lastIndexOf("\."))
+
+
     let hashes = parseInt(signed.substring(signed.lastIndexOf("\.")+1))
 
     signed = signed.substring(0,signed.lastIndexOf("\."))
@@ -73,7 +77,7 @@ function encrypt(msg) {
     
     const hashes = 1000
 
-    let signedmsg = msg + "." + SHA256(msg,signkey,hashes) + "." + hashes
+    let signedmsg = msg + "." + SHA256(msg,signkey,hashes) + "." + hashes + "." + require("./package.json").version.replaceAll("\.","")
     
     let xoredmsg = xor(signedmsg,messagekey)
     

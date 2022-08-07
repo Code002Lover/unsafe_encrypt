@@ -23,13 +23,13 @@ for(let i=0;i<attempts;i++) {
     let msg = randomString(50)
     let encrypted = unsafeencrypt.encrypt(msg)
 
-    let newkey = crypto.randomBytes(256).toString("hex")
+    let newkey = crypto.randomBytes(2**10).toString("hex")
 
     fs.writeFileSync("messagekey.txt",newkey)
 
     let out = unsafeencrypt.decrypt(encrypted)
 
-    if(out.status=="success" && lastkey!=newkey) {
+    if(out.status=="success" && lastkey!=newkey && out.msg == msg) {
         console.error(out)
         console.log("message:",msg);
         console.log(lastkey);

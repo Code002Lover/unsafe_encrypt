@@ -23,10 +23,11 @@ function xor(a,b) {
     let c = ""
     for (let j=0;j<a.length;j++) {
         cc = a.charCodeAt(j) ^ j
-        for(let i=0;i<b.length;i++) {
-            cc = cc ^ b.charCodeAt(i) ^ i
-        }
-        c += String.fromCharCode(cc ^ a.length)
+        cc = cc ^ b.charCodeAt((j%b.length))
+        // for(let i=0;i<b.length;i++) {
+        //     cc = cc ^ b.charCodeAt(i)
+        // }
+        c += String.fromCharCode(cc)
     }
 
     return c

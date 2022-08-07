@@ -1,5 +1,5 @@
 [[ ENCRYPT ]]
 
 -h    : shows you the current view
--s   : silent mode, only output to output.txt
+-s    : silent mode, only output to output.txt
 --msg : the message to be encrypted

@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "node encrypt.js --msg test && node decrypt.js -s"
+    "test": "node tests"
   },
   "repository": {
     "type": "git",

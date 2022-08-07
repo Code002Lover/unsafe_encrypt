@@ -27,9 +27,8 @@ for(let i in argv) {
 if(msg == "") {
 
     const readline = require("readline-sync");
-    const prompt = readline.question
 
-    msg = prompt("Message: ")
+    msg =  readline.question("Message: ")
 
 }
 

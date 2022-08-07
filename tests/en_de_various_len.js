@@ -10,7 +10,7 @@ const randomString = (length = 4) => {
 
 };
 
-const attempts = 1000
+const attempts = 100
 
 let string = randomString(attempts)
 

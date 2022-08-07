@@ -12,7 +12,7 @@ const randomString = (length = 4) => {
 
 };
 
-const attempts = 10000
+const attempts = 1000
 
 const per = attempts/100
 

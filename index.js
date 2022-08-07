@@ -6,6 +6,8 @@ const fs = require("fs")
 
 function decrypt(str,options) {
 
+    options = options || {}
+
     str = str || ""
 
     let out;

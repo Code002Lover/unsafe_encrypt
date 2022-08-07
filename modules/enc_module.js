@@ -8,7 +8,7 @@ const crypto = require("crypto")
 */
 function SHA256(str,salt,num) {
     if(!num && num!==0)num=1;
-    if(!str)return;
+    if(!str)str="";
     let ret = str;
     for (let i = 0; i < num; i++) {
         ret = crypto

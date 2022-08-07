@@ -77,7 +77,7 @@ function encrypt(msg) {
     
     const hashes = 1000
 
-    let signedmsg = msg + "." + SHA256(msg,signkey,hashes) + "." + hashes + "." + require("./package.json").version.replaceAll("\.","")
+    let signedmsg = msg + "." + SHA256(msg,signkey,hashes) + "." + hashes + "." + require("./package.json").version.replace(/\./g,"")
     
     let xoredmsg = xor(signedmsg,messagekey)
     

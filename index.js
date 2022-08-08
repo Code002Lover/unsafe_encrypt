@@ -47,7 +47,9 @@ function decrypt(str,options) {
         //message has been verified
         return {
             "msg": msg,
-            "status": "success"
+            "status": "success",
+            "version": version,
+            "currentversion": require("./package.json").version.replace(/\./g,"")
         }
     } else {
         //there's been an error, invalid key?
@@ -55,7 +57,9 @@ function decrypt(str,options) {
             "status": "error",
             "msg": msg,
             "signature": hash,
-            "expected": signhash
+            "expected": signhash,
+            "version": version,
+            "currentversion": require("./package.json").version.replace(/\./g,"")
         }
     }
 }

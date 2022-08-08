@@ -65,6 +65,7 @@ function decrypt(str,options) {
 }
 
 function encrypt(msg) {
+
     if(!fs.existsSync("signkey.txt")) {
         require("./modules/gen_signkey.js")
         console.log("generated a signature key")
@@ -93,7 +94,47 @@ function encrypt(msg) {
 }
 
 
+function pack(options) {
+
+    options = options || {}
+
+    let signkey = options.signkey || fs.readFileSync("signkey.txt").toString()
+
+    let messagekey = options.messagekey || fs.readFileSync("messagekey.txt").toString()
+
+    let out = `${signkey}.${messagekey}`
+
+    return out
+}
+
+function unpack(options) {
+
+    if(typeof options == "string")options = {packed: options}
+
+    options = options || {}
+
+    if(options.packed) {
+        let keys = options.packed.split("\.")
+
+        let signkey = keys[0]
+        let messagekey = keys[1]
+        
+        if(options.writefile) {
+            fs.writeFileSync("signkey.txt",signkey)
+            fs.writeFileSync("messagekey.txt",messagekey)
+        }
+        return {
+            "messagekey": messagekey,
+            "signkey": signkey
+        }
+    }
+
+    return {"error":"no packed keys given"}
+}
+
 module.exports = {
     decrypt,
-    encrypt
+    encrypt,
+    pack,
+    unpack
 }

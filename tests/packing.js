@@ -29,3 +29,5 @@ for(let i=0;i<attempts;i++) {
     }
 
 }
+
+console.log("succeeded packing test")

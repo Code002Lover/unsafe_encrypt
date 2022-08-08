@@ -17,6 +17,8 @@ require("./en_de_various_len.js")
 
 require("./messing_with_keys.js")
 
+require("./version.js")
+
 
 
 

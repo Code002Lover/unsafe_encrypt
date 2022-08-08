@@ -22,8 +22,15 @@ function decrypt(str,options) {
 
     out = buf.toString()
 
-    let messagekey = options.messagekey
-    if(!messagekey)messagekey = fs.readFileSync("messagekey.txt").toString()
+    if(options.packed) {
+        let unpacked = unpack(options.packed)
+        options.messagekey = unpacked.messagekey
+        options.signkey = unpacked.signkey
+    }
+
+    let messagekey  = options.messagekey    || fs.readFileSync("messagekey.txt").toString()
+
+    let signkey     = options.signkey       || fs.readFileSync("signkey.txt").toString()
 
     let signed = xor(out,messagekey)
 
@@ -38,8 +45,7 @@ function decrypt(str,options) {
     let msg = signed.substring(0,signed.lastIndexOf("\."))
     let hash = signed.substring(signed.lastIndexOf("\.")+1)
 
-    let signkey = options.signkey
-    if(!signkey)signkey = fs.readFileSync("signkey.txt").toString()
+    
 
     let signhash = SHA256(msg,signkey,hashes)
 
@@ -64,23 +70,31 @@ function decrypt(str,options) {
     }
 }
 
-function encrypt(msg) {
+function encrypt(msg, options) {
 
-    if(!fs.existsSync("signkey.txt")) {
+    options = options || {}
+
+    if(options.packed) {
+        let unpacked = unpack(options.packed)
+        options.messagekey = unpacked.messagekey
+        options.signkey = unpacked.signkey
+    }
+
+    if(!fs.existsSync("signkey.txt") && !options.signkey) {
         require("./modules/gen_signkey.js")
         console.log("generated a signature key")
     }
     
-    if(!fs.existsSync("messagekey.txt")) {
+    if(!fs.existsSync("messagekey.txt") && !options.messagekey) {
         require("./modules/gen_messagekey.js")
         console.log("generated a message key")
     }
     
-    const signkey = fs.readFileSync("signkey.txt").toString()
+    const signkey = options.signkey || fs.readFileSync("signkey.txt").toString()
     
-    const messagekey = fs.readFileSync("messagekey.txt").toString()
+    const messagekey = options.messagekey || fs.readFileSync("messagekey.txt").toString()
     
-    const hashes = 1000
+    const hashes = options.hashes || 1000
 
     let signedmsg = msg + "." + SHA256(msg,signkey,hashes) + "." + hashes + "." + require("./package.json").version.replace(/\./g,"")
     

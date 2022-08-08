@@ -1,6 +1,6 @@
-const unsafeencrypt = require("../index.js")
-const crypto = require("crypto")
-const fs = require("fs")
+import { encrypt, decrypt } from "../index.js";
+import { randomBytes } from "crypto";
+import { readFileSync, writeFileSync } from "fs";
 
 const randomString = (length = 4) => {
     let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -18,16 +18,16 @@ const per = attempts/100
 
 for(let i=0;i<attempts;i++) {
 
-    let lastkey = fs.readFileSync("messagekey.txt").toString()
+    let lastkey = readFileSync("messagekey.txt").toString()
 
     let msg = randomString(50)
-    let encrypted = unsafeencrypt.encrypt(msg)
+    let encrypted = encrypt(msg)
 
-    let newkey = crypto.randomBytes(2**10).toString("hex")
+    let newkey = randomBytes(2**10).toString("hex")
 
-    fs.writeFileSync("messagekey.txt",newkey)
+    writeFileSync("messagekey.txt",newkey)
 
-    let out = unsafeencrypt.decrypt(encrypted)
+    let out = decrypt(encrypted)
 
     if(out.status=="success" && lastkey!=newkey && out.msg == msg) {
         console.error(out)
@@ -46,15 +46,15 @@ console.log("successfully tested randomly messing with messagekey");
 
 for(let i=0;i<attempts;i++) {
 
-    let lastkey = fs.readFileSync("signkey.txt").toString()
+    let lastkey = readFileSync("signkey.txt").toString()
 
-    let encrypted = unsafeencrypt.encrypt(randomString(50))
+    let encrypted = encrypt(randomString(50))
 
-    let newkey = crypto.randomBytes(256).toString("hex")
+    let newkey = randomBytes(256).toString("hex")
 
-    fs.writeFileSync("signkey.txt",newkey)
+    writeFileSync("signkey.txt",newkey)
 
-    let out = unsafeencrypt.decrypt(encrypted)
+    let out = decrypt(encrypted)
 
     if(out.status=="success" && lastkey!=newkey) {
         console.error(out)

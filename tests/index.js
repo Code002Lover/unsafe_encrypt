@@ -1,27 +1,25 @@
-const unsafeencrypt = require("../index.js")
+import { existsSync, unlinkSync } from "fs"
 
-const fs = require("fs")
-
-if(fs.existsSync("messagekey.txt")) {
-    fs.unlinkSync("messagekey.txt")
+if(existsSync("messagekey.txt")) {
+    unlinkSync("messagekey.txt")
 }
-if(fs.existsSync("signkey.txt")) {
-    fs.unlinkSync("signkey.txt")
+if(existsSync("signkey.txt")) {
+    unlinkSync("signkey.txt")
 }
 
 //cleared keys
 
 
 
-require("./en_de_various_len.js")
+import "./en_de_various_len.js"
 
-require("./messing_with_keys.js")
+import "./messing_with_keys.js"
 
-require("./version.js")
+import "./version.js"
 
-require("./packing.js")
+import "./packing.js"
 
-require("./extended_packing.js")
+import "./extended_packing.js"
 
 
 
@@ -29,11 +27,11 @@ require("./extended_packing.js")
 
 console.log("successfully ended testing");
 
-if(fs.existsSync("messagekey.txt")) {
-    fs.unlinkSync("messagekey.txt")
+if(existsSync("messagekey.txt")) {
+    unlinkSync("messagekey.txt")
 }
-if(fs.existsSync("signkey.txt")) {
-    fs.unlinkSync("signkey.txt")
+if(existsSync("signkey.txt")) {
+    unlinkSync("signkey.txt")
 }
 //clean up after we're finished
 

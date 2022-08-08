@@ -1,6 +1,6 @@
-const unsafeencrypt = require("./index.js")
+import { decrypt } from "./index.js"
 
-const fs = require("fs")
+import { readFileSync } from "fs"
 
 let argv = process.argv.splice(2)
 
@@ -17,12 +17,12 @@ for(let i in argv) {
             input = argv[++i]
             break
         case "-h":
-            console.log(fs.readFileSync("helpmessages/decrypt.txt").toString())
+            console.log(readFileSync("helpmessages/decrypt.txt").toString())
             process.exit(0)
     }
 }
 
-const out = unsafeencrypt.decrypt(input)
+const out = decrypt(input)
 
 if(out.status == "success") {
     if(silent)return

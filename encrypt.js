@@ -1,6 +1,6 @@
-const unsafeencrypt = require("./index.js")
+import { encrypt } from "./index.js"
 
-const fs = require("fs")
+import { readFileSync, writeFileSync } from "fs"
 
 let argv = process.argv.splice(2)
 
@@ -17,7 +17,7 @@ for(let i in argv) {
             msg = argv[++i]
             break;
         case "-h":
-            console.log(fs.readFileSync("helpmessages/encrypt.txt").toString())
+            console.log(readFileSync("helpmessages/encrypt.txt").toString())
             process.exit(0)
     }
 }
@@ -32,7 +32,7 @@ if(msg == "") {
 
 }
 
-const xoredmsg = unsafeencrypt.encrypt(msg)
+const xoredmsg = encrypt(msg)
 
 if(!silent) {
     console.log("output:");
@@ -40,4 +40,4 @@ if(!silent) {
     console.log(xoredmsg);
 }
 
-fs.writeFileSync("output.txt",xoredmsg)
+writeFileSync("output.txt",xoredmsg)

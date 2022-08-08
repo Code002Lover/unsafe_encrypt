@@ -1,6 +1,11 @@
-const crypto = require("crypto");
-const fs = require("fs");
+import { randomBytes } from "crypto";
+import { writeFileSync } from "fs";
 
-const messagekey = crypto.randomBytes(2**10).toString('hex');
+function run() {
 
-fs.writeFileSync("messagekey.txt",messagekey)
+    const messagekey = randomBytes(2**10).toString('hex');
+
+    writeFileSync("messagekey.txt",messagekey)
+}
+
+export {run}

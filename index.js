@@ -1,8 +1,12 @@
-const enc_stuff = require("./modules/enc_module.js")
-const SHA256 = enc_stuff.SHA256
-const xor = enc_stuff.xor
+import {SHA256, xor} from "./modules/enc_module.js"
 
-const fs = require("fs")
+import { readFileSync,writeFileSync,existsSync } from "fs"
+
+import { run as gen_messagekey }  from "./modules/gen_messagekey.js"
+
+import { run as gen_signkey }  from "./modules/gen_signkey.js"
+
+const packageversion = JSON.parse(readFileSync("package.json").toString()).version.replace(/\./g,"")
 
 function decrypt(str,options) {
 
@@ -15,7 +19,7 @@ function decrypt(str,options) {
     if(str.search("\\.") == -1 && str != "") {
         out = str
     } else {
-        out = fs.readFileSync(str || "output.txt").toString()
+        out = readFileSync(str || "output.txt").toString()
     }
 
     let buf = Buffer.from(out,"hex")
@@ -28,9 +32,9 @@ function decrypt(str,options) {
         options.signkey = unpacked.signkey
     }
 
-    let messagekey  = options.messagekey    || fs.readFileSync("messagekey.txt").toString()
+    let messagekey  = options.messagekey    || readFileSync("messagekey.txt").toString()
 
-    let signkey     = options.signkey       || fs.readFileSync("signkey.txt").toString()
+    let signkey     = options.signkey       || readFileSync("signkey.txt").toString()
 
     let signed = xor(out,messagekey)
 
@@ -55,7 +59,7 @@ function decrypt(str,options) {
             "msg": msg,
             "status": "success",
             "version": version,
-            "currentversion": require("./package.json").version.replace(/\./g,"")
+            "currentversion": packageversion
         }
     } else {
         //there's been an error, invalid key?
@@ -65,7 +69,7 @@ function decrypt(str,options) {
             "signature": hash,
             "expected": signhash,
             "version": version,
-            "currentversion": require("./package.json").version.replace(/\./g,"")
+            "currentversion": packageversion
         }
     }
 }
@@ -80,23 +84,23 @@ function encrypt(msg, options) {
         options.signkey = unpacked.signkey
     }
 
-    if(!fs.existsSync("signkey.txt") && !options.signkey) {
-        require("./modules/gen_signkey.js")
+    if(!existsSync("signkey.txt") && !options.signkey) {
+        gen_signkey()
         console.log("generated a signature key")
     }
     
-    if(!fs.existsSync("messagekey.txt") && !options.messagekey) {
-        require("./modules/gen_messagekey.js")
+    if(!existsSync("messagekey.txt") && !options.messagekey) {
+        gen_messagekey()
         console.log("generated a message key")
     }
     
-    const signkey = options.signkey || fs.readFileSync("signkey.txt").toString()
+    const signkey = options.signkey || readFileSync("signkey.txt").toString()
     
-    const messagekey = options.messagekey || fs.readFileSync("messagekey.txt").toString()
+    const messagekey = options.messagekey || readFileSync("messagekey.txt").toString()
     
     const hashes = options.hashes || 1000
 
-    let signedmsg = msg + "." + SHA256(msg,signkey,hashes) + "." + hashes + "." + require("./package.json").version.replace(/\./g,"")
+    let signedmsg = msg + "." + SHA256(msg,signkey,hashes) + "." + hashes + "." + packageversion
     
     let xoredmsg = xor(signedmsg,messagekey)
     
@@ -112,9 +116,9 @@ function pack(options) {
 
     options = options || {}
 
-    let signkey = options.signkey || fs.readFileSync("signkey.txt").toString()
+    let signkey = options.signkey || readFileSync("signkey.txt").toString()
 
-    let messagekey = options.messagekey || fs.readFileSync("messagekey.txt").toString()
+    let messagekey = options.messagekey || readFileSync("messagekey.txt").toString()
 
     let out = `${signkey}.${messagekey}`
 
@@ -134,8 +138,8 @@ function unpack(options) {
         let messagekey = keys[1]
         
         if(options.writefile) {
-            fs.writeFileSync("signkey.txt",signkey)
-            fs.writeFileSync("messagekey.txt",messagekey)
+            writeFileSync("signkey.txt",signkey)
+            writeFileSync("messagekey.txt",messagekey)
         }
         return {
             "messagekey": messagekey,
@@ -146,7 +150,7 @@ function unpack(options) {
     return {"error":"no packed keys given"}
 }
 
-module.exports = {
+export {
     decrypt,
     encrypt,
     pack,

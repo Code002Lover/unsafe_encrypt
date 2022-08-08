@@ -1,4 +1,4 @@
-const unsafeencrypt = require("../index.js")
+import { encrypt, decrypt } from "../index.js";
 
 const randomString = (length = 4) => {
     let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -15,9 +15,9 @@ const attempts = 100
 let string = randomString(attempts)
 
 for(let i=0;i<attempts;i++) {
-    let encrypted = unsafeencrypt.encrypt(string.substring(0,i))
+    let encrypted = encrypt(string.substring(0,i))
 
-    let out = unsafeencrypt.decrypt(encrypted)
+    let out = decrypt(encrypted)
 
     if(out.status == "error") {
         console.error(out)

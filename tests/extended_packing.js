@@ -1,6 +1,6 @@
-const unsafeencrypt = require("../index.js")
+import { pack, encrypt, decrypt } from "../index.js";
 
-const crypto = require("crypto");
+import { randomBytes } from "crypto";
 
 const attempts = 1000
 
@@ -20,18 +20,18 @@ let string = randomString(attempts)
 
 for(let i=0;i<attempts;i++) {
 
-    const messagekey = crypto.randomBytes(2**10).toString('hex');
+    const messagekey = randomBytes(2**10).toString('hex');
 
-    const signkey = crypto.randomBytes(2**8).toString('hex');
+    const signkey = randomBytes(2**8).toString('hex');
 
-    const packed = unsafeencrypt.pack({
+    const packed = pack({
         signkey: signkey,
         messagekey: messagekey
     })
 
-    let encrypted = unsafeencrypt.encrypt(string.substring(0,i), {packed:packed})
+    let encrypted = encrypt(string.substring(0,i), {packed:packed})
 
-    let out = unsafeencrypt.decrypt(encrypted, {packed:packed})
+    let out = decrypt(encrypted, {packed:packed})
 
     if(out.status == "error") {
         console.error(out)

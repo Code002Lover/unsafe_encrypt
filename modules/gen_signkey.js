@@ -1,6 +1,12 @@
-const crypto = require("crypto");
-const fs = require("fs");
+import { randomBytes } from "crypto";
+import { writeFileSync } from "fs";
 
-const signkey = crypto.randomBytes(2**8).toString('hex');
+function run() {
 
-fs.writeFileSync("signkey.txt",signkey)
+    const signkey = randomBytes(2**8).toString('hex');
+
+    writeFileSync("signkey.txt",signkey)
+
+}
+
+export {run}

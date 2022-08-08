@@ -21,6 +21,8 @@ require("./version.js")
 
 require("./packing.js")
 
+require("./extended_packing.js")
+
 
 
 

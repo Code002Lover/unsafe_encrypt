@@ -27,7 +27,7 @@ function decrypt(str,options) {
     out = buf.toString()
 
     if(options.packed) {
-        let unpacked = unpack(options.packed)
+        let unpacked = unpack_keys(options.packed)
         options.messagekey = unpacked.messagekey
         options.signkey = unpacked.signkey
     }
@@ -79,7 +79,7 @@ function encrypt(msg, options) {
     options = options || {}
 
     if(options.packed) {
-        let unpacked = unpack(options.packed)
+        let unpacked = unpack_keys(options.packed)
         options.messagekey = unpacked.messagekey
         options.signkey = unpacked.signkey
     }
@@ -112,7 +112,7 @@ function encrypt(msg, options) {
 }
 
 
-function pack(options) {
+function pack_keys(options) {
 
     options = options || {}
 
@@ -125,7 +125,7 @@ function pack(options) {
     return out
 }
 
-function unpack(options) {
+function unpack_keys(options) {
 
     if(typeof options == "string")options = {packed: options}
 
@@ -150,9 +150,115 @@ function unpack(options) {
     return {"error":"no packed keys given"}
 }
 
+function chunkString(str, size) {
+    const numChunks = Math.ceil(str.length / size)
+    const chunks = new Array(numChunks)
+  
+    for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+      chunks[i] = str.substr(o, size)
+    }
+  
+    return chunks
+}
+  //https://stackoverflow.com/a/29202760
+
+function pack_text(options) {
+    options = options || {}
+
+    if(options.text && options.size) {
+        //two modes: one for sizes >= 128, where every part is signed
+        // and one for sizes < 128 && > 0, where the encrypted part is just legit split
+
+        if(options.size < 128) {
+            if(options.size <= 0) {
+                throw new InvalidOptionsError("the size given has to be greater than 0")
+            }
+
+            let enc = encrypt(options.text,options)
+
+            let out = chunkString(enc,options.size)
+
+            out[-1] = "0"
+
+            return out
+
+        } else {
+            //>=128
+
+            options.hashes = options.hashes || 1000
+
+            let chunkSizes = options.size - 55 - options.hashes.toString().length - 3 - 3 
+            //45 because of the hash (+10 because of base64 to hex conversion), 3 because of the hashes, 3 dots, 3 for the version
+            if(chunkSizes <= 0) {
+                options.size--;
+                console.error("chunkSizes calculated would be impossible")
+                pack_text(options)
+            }
+
+            let chunks = chunkString(options.text,chunkSizes)
+
+            let out = {}
+
+            for(let i in chunks) {
+                let chunk = chunks[i]
+                out[i] = encrypt(chunk,options)
+            }
+
+            out[-1] = "1"
+
+            return out
+        }
+    } else {
+        throw new InvalidOptionsError("either no options, no text, or no size was given")
+    }
+}
+
+function unpack_text(options) {
+    options = options || {}
+
+    if(options.data) {
+        if(options.data[-1] || options.size) {
+            let mode = options.data[-1] || ""+(+(options.size >= 128))
+
+            if(mode == "0") {
+                let inp = ""
+                for(let i in options.data) {
+                    if(i!=-1) {
+                        inp += options.data[i]
+                    }
+                }
+
+                return decrypt(inp,options).msg
+            } else {
+                let out = ""
+                for(let i in options.data) {
+                    if(i!=-1) {
+                        let temp = decrypt(options.data[i],options)
+                        if(temp.status=="success") {
+                            out += temp.msg
+                        } else {
+                            console.error("error decrypting packed text")
+                            return
+                        }
+                    }
+                }
+                return out
+            }
+
+        } else {
+            throw new InvalidOptionsError("no size and not enough data given")
+        }
+
+    } else {
+        throw new InvalidOptionsError("no data given")
+    }
+}
+
 export {
     decrypt,
     encrypt,
-    pack,
-    unpack
+    pack_keys,
+    unpack_keys,
+    pack_text,
+    unpack_text
 }

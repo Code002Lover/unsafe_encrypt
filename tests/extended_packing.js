@@ -1,4 +1,4 @@
-import { pack, encrypt, decrypt } from "../index.js";
+import { pack_keys as pack, encrypt, decrypt } from "../index.js";
 
 import { randomBytes } from "crypto";
 

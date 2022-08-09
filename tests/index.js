@@ -21,7 +21,7 @@ import "./packing.js"
 
 import "./extended_packing.js"
 
-
+import "./pack_text.js"
 
 
 

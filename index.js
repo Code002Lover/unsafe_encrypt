@@ -6,7 +6,7 @@ import { run as gen_messagekey }  from "./modules/gen_messagekey.js"
 
 import { run as gen_signkey }  from "./modules/gen_signkey.js"
 
-const packageversion = JSON.parse(readFileSync("package.json").toString()).version.replace(/\./g,"")
+const packageversion = (existsSync("package.json") && JSON.parse(readFileSync("package.json").toString()).version.replace(/\./g,"")) || "101"
 
 function decrypt(str,options) {
 

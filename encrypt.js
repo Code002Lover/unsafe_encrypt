@@ -2,6 +2,8 @@ import { encrypt } from "./index.js"
 
 import { readFileSync, writeFileSync } from "fs"
 
+import {question} from "readline-sync";
+
 let argv = process.argv.splice(2)
 
 let silent = false
@@ -25,11 +27,7 @@ for(let i in argv) {
 
 
 if(msg == "") {
-
-    const readline = require("readline-sync");
-
-    msg =  readline.question("Message: ")
-
+    msg = question("Message: ")
 }
 
 const xoredmsg = encrypt(msg)

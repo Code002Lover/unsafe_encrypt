@@ -254,8 +254,13 @@ function unpack_text(options) {
     }
 }
 
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
 function web_version() {
-    return readFileSync("./website_compatible.js").toString()
+    return readFileSync(__dirname + "/website_compatible.js").toString()
 }
 
 export {

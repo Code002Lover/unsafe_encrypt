@@ -4,7 +4,7 @@
   },
   "name": "unsafe_encrypt",
   "description": "run `node encrypt.js`\r input the message",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "main": "index.js",
   "scripts": {

@@ -15,17 +15,18 @@ the receiver runs `node decrypt.js` and gets the original message you entered
 
 install it `npm install unsafe_encrypt`
 
-after requiring it in your project via `const unsafeencrypt = require("./index.js")`, you can use to encrypt and decrypt
+require it in your project via `import "unsafe_encrypt"`
 
 #### functions
 
 ### encrypt
-example: `let encrypted = unsafeencrypt.encrypt(input)`
+example: 
+`let encrypted = encrypt(input)`
 
 output: a hex string
 
 ### decrypt
-example: `let out = unsafeencrypt.decrypt(input)`
+example: `let out = decrypt(input)`
 where input is optional (default: "output.txt")  
 input can be a file name (has to have a "." in it to be detected), or a previously encrypted string  
 
@@ -34,4 +35,3 @@ status: "success" or "error"
 msg: the decrypted message, even if it failed  
 signature: the signature that is in the encrypted message, undefined if status is "success"  
 expected: the signature that is expected to be in the encrypted message, undefined if status is "success"  
-

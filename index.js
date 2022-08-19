@@ -254,11 +254,16 @@ function unpack_text(options) {
     }
 }
 
+function web_version() {
+    return readFileSync("./website_compatible.js").toString()
+}
+
 export {
     decrypt,
     encrypt,
     pack_keys,
     unpack_keys,
     pack_text,
-    unpack_text
+    unpack_text,
+    web_version
 }
